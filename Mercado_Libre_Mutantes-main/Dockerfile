@@ -3,12 +3,12 @@ FROM maven:3.9-eclipse-temurin-17-alpine AS build
 
 WORKDIR /app
 
-# Copy only the Maven descriptor first for dependency caching
-COPY Mercado_Libre_Mutantes-main/pom.xml ./
+# Copy only the Maven descriptor first for dependency caching (nested path)
+COPY Mercado_Libre_Mutantes-main/Mercado_Libre_Mutantes-main/pom.xml ./
 RUN mvn dependency:go-offline -B
 
-# Copy sources and build (skip tests for faster image build)
-COPY Mercado_Libre_Mutantes-main/src ./src
+# Copy sources and build (skip tests for faster image build) from nested folder
+COPY Mercado_Libre_Mutantes-main/Mercado_Libre_Mutantes-main/src ./src
 RUN mvn clean package -DskipTests -DskipITs
 
 # Runtime stage with a lightweight JRE
